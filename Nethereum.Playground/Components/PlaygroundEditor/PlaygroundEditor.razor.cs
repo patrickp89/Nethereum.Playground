@@ -116,6 +116,11 @@ namespace Nethereum.Playground.Components.PlaygroundEditor
             {
                 codeGenLanguage = CodeGenLanguage.Vb;
             }
+            if (CodeLanguage == CodeLanguage.FSharp)
+            {
+                // TODO: this should rather be a case expr with CSharp as the default branch!
+                codeGenLanguage = CodeGenLanguage.FSharp;
+            }
             var contractAbi = new Nethereum.Generators.Net.GeneratorModelABIDeserialiser().DeserialiseABI(abi);
             Console.WriteLine(contractAbi.Constructor.InputParameters.Count());
             var generator = new ContractProjectGenerator(contractAbi, contractName, contractByteCode, serviceNamespace, serviceNamespace, serviceNamespace, serviceNamespace, "", "/", codeGenLanguage);
@@ -158,7 +163,6 @@ namespace Nethereum.Playground.Components.PlaygroundEditor
 
             if (Id != null)
             {
-                
                 var codeSampleParameter = CodeSamples.FirstOrDefault(x => x.Id == Id);
                 if (codeSampleParameter != null)
                 {
@@ -166,7 +170,6 @@ namespace Nethereum.Playground.Components.PlaygroundEditor
                 }
                 await ChangeCodeSampleAsync(SelectedCodeSample);
             }
-
            
             await base.OnParametersSetAsync();
         }
@@ -182,11 +185,8 @@ namespace Nethereum.Playground.Components.PlaygroundEditor
         /// <returns></returns>
         protected override async Task OnAfterRenderAsync(bool value)
         {
-           
-
             if (!CodeSampleRepository.LoadedUserSamples)
             {
-                
                 await LoadSavedAsync();
                 
                 //waiting a second to do a state has changed to display the items
@@ -196,10 +196,7 @@ namespace Nethereum.Playground.Components.PlaygroundEditor
                     _timer.Dispose();
                 }), null, 1000, 1000);
             }
-          
         }
-
-
 
         public string GetEditorLanguage()
         {
@@ -209,6 +206,8 @@ namespace Nethereum.Playground.Components.PlaygroundEditor
                     return "csharp";
                 case CodeLanguage.VbNet:
                     return "vb";
+                case CodeLanguage.FSharp:
+                    return "fsharp";
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -221,6 +220,8 @@ namespace Nethereum.Playground.Components.PlaygroundEditor
                     return ".cs";
                 case CodeLanguage.VbNet:
                     return ".vb";
+                case CodeLanguage.FSharp:
+                    return ".fs";
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -284,7 +285,6 @@ namespace Nethereum.Playground.Components.PlaygroundEditor
             CodeSamples = new List<CodeSample>();
             var codeSamples = await CodeSampleRepository.GetCodeSamplesAsync(CodeLanguage);
             CodeSamples.AddRange(codeSamples);
-            
         }
 
         public async Task LoadFromFileAsync()
@@ -295,24 +295,19 @@ namespace Nethereum.Playground.Components.PlaygroundEditor
 
         public async Task CodeSampleChanged(ChangeEventArgs evt)
         {
-
-            //Console.WriteLine(selectedId);
             //we may not have an id, so we only "navigate" if we have one to allow users copy and paste
             var selectedCodeSample = int.Parse(evt.Value.ToString());
             var selectedId = CodeSamples[selectedCodeSample].Id;
             if (selectedId != null)
             {
-                Console.WriteLine(selectedId);
-                
+                Console.WriteLine("selectedId is {0}", selectedId);
                 NavigationManager.NavigateTo($"{NavigationManager.BaseUri}{GetEditorLanguage()}/id/" + selectedId);
-                //Id = selectedId;
             }
             else
             {
                 await ChangeCodeSampleAsync(selectedCodeSample);
                 SelectedCodeSample = selectedCodeSample;
             }
-
         }
 
         public async Task ChangeCodeSampleAsync(int index)
@@ -404,6 +399,8 @@ namespace Nethereum.Playground.Components.PlaygroundEditor
                     return CompileAndRunCsharp();
                 case CodeLanguage.VbNet:
                     return CompileAndRunVbNet();
+                case CodeLanguage.FSharp:
+                    return CompileAndRunFsharp();
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -470,9 +467,10 @@ namespace Nethereum.Playground.Components.PlaygroundEditor
             }
         }
 
+        protected async Task CompileAndRunFsharp()
+        {
+            // TODO: ...
+        }
     }
 
-   
-
 }
-

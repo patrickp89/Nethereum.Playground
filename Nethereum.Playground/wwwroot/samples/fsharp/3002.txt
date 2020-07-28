@@ -1,0 +1,65 @@
+﻿open Nethereum.Web3
+open Nethereum.Hex.HexTypes
+open Nethereum.RPC.Eth.DTOs
+
+// Connect to Ethereum mainnet using Infura:
+let generateWeb3Instance () =
+    Web3(url = "https://mainnet.infura.io/v3/7238211010344719ad14a89db874158c")
+ 
+// Getting current block number:
+let printCurrentBlockNumber (web3: Web3) =
+    let blockNumber =
+        web3.Eth.Blocks.GetBlockNumber.SendRequestAsync()
+        |> Async.AwaitTask
+        |> Async.RunSynchronously
+    printfn "Current BlockNumber is: %A" blockNumber
+
+// Print some details for a given transaction:
+let printTxDetails (tx: Transaction) =
+    printfn "Transaction From: %s" tx.From
+    printfn "Transaction To: %s" tx.To
+    printfn "Transaction Amount: %A" tx.Value
+    printfn "Transaction From: %s" tx.TransactionHash
+
+// Print some details for a given block (e.g. its first transaction):
+let printBlockDetails (block: BlockWithTransactions) =
+    printfn "Block number: %A" block.Number.Value
+    printfn "Block hash: %s" block.BlockHash
+    printfn "Block no of transactions: %d" block.Transactions.Length
+    let firstTx = block.Transactions.[0]
+    printfn "Block transaction 0:"
+    printTxDetails firstTx
+
+// Get a block with its transactions:
+let printBlockWithTransactions (web3: Web3) =
+    let blockNumber = (bigint 8257129)
+    let hexBlockNumber = HexBigInteger(blockNumber)
+    let block =
+        web3.Eth.Blocks.GetBlockWithTransactionsByNumber.SendRequestAsync(hexBlockNumber)
+        |> Async.AwaitTask
+        |> Async.RunSynchronously
+    printBlockDetails block
+
+// Get a transaction and its receipt by its hash:
+let printTxAndReceipt (web3: Web3) =
+    let txHash = "0xb4729a0d8dd30e3070d0cb203090f2b792e029f6fa4629e96d2ebc1de13cb5c4"
+    printfn "Getting TX for hash %s" txHash
+    let transaction =
+        web3.Eth.Transactions.GetTransactionByHash.SendRequestAsync(txHash)
+        |> Async.AwaitTask
+        |> Async.RunSynchronously
+    printTxDetails transaction
+    let receipt =
+        web3.Eth.Transactions.GetTransactionReceipt.SendRequestAsync(txHash)
+        |> Async.AwaitTask
+        |> Async.RunSynchronously
+    printfn "TransactionReceipt Logs: %d" receipt.Logs.Count
+
+
+[<EntryPoint>]
+let main argv =
+    let web3 = generateWeb3Instance ()
+    printCurrentBlockNumber web3
+    printBlockWithTransactions web3
+    printTxAndReceipt web3
+    0

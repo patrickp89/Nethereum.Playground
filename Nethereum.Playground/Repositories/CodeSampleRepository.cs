@@ -28,7 +28,7 @@ namespace Nethereum.Playground.Repositories
             _navigationManager = navigationManager;
             LoadCSharpSamples();
             LoadVbSamples();
-         
+            LoadFSharpSamples();
         }
 
         public async Task LoadUserSamplesAsync()
@@ -99,6 +99,11 @@ namespace Nethereum.Playground.Repositories
         public void LoadVbSamples()
         {
             _codeSamples.AddRange(VbNetSamples.GetSamples());
+        }
+
+        public void LoadFSharpSamples()
+        {
+            _codeSamples.AddRange(FSharpSamples.GetSamples());
         }
 
         public bool LoadedUserSamples { get; private set; } = false;

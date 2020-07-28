@@ -26,6 +26,8 @@ namespace Nethereum.Playground.Repositories
                     return Name + ".cs";
                 case CodeLanguage.VbNet:
                     return Name + ".vb";
+                case CodeLanguage.FSharp:
+                    return Name + ".fs";
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -38,6 +40,8 @@ namespace Nethereum.Playground.Repositories
                 case CodeLanguage.CSharp:
                     return  ".txt";
                 case CodeLanguage.VbNet:
+                    return  ".txt";
+                case CodeLanguage.FSharp:
                     return  ".txt";
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -52,6 +56,8 @@ namespace Nethereum.Playground.Repositories
                     return $"{baseUri}samples/csharp/{Id}{GetLocalExtension()}";
                 case CodeLanguage.VbNet:
                     return $"{baseUri}samples/vb/{Id}{GetLocalExtension()}";
+                case CodeLanguage.FSharp:
+                    return $"{baseUri}samples/fsharp/{Id}{GetLocalExtension()}";
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -59,4 +65,3 @@ namespace Nethereum.Playground.Repositories
 
     }
 }
-

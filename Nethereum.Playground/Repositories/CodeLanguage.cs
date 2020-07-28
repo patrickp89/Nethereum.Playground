@@ -3,6 +3,7 @@
     public enum CodeLanguage
     {
         CSharp,
-        VbNet
+        VbNet,
+        FSharp
     }
 }

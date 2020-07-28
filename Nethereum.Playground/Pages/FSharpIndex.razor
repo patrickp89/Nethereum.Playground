@@ -1,0 +1,15 @@
+﻿@page "/fsharp"
+@page "/fsharp/url/{url}"
+@page "/fsharp/id/{id}"
+@using Nethereum.Playground.Repositories
+<PlaygroundEditor CodeLanguage="@CodeLanguage.FSharp" Id="@Id" Url="@Url"/>
+
+@code {
+
+[Parameter]
+public string Url { get; set; }
+
+[Parameter]
+public string Id { get; set; }
+
+}
