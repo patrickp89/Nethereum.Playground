@@ -1,4 +1,4 @@
-﻿open Nethereum.Web3
+open Nethereum.Web3
 open Nethereum.Hex.HexTypes
 open Nethereum.RPC.Eth.DTOs
 
@@ -8,11 +8,10 @@ let generateWeb3Instance () =
  
 // Getting current block number:
 let printCurrentBlockNumber (web3: Web3) =
-    let blockNumber =
-        web3.Eth.Blocks.GetBlockNumber.SendRequestAsync()
+    web3.Eth.Blocks.GetBlockNumber.SendRequestAsync ()
         |> Async.AwaitTask
         |> Async.RunSynchronously
-    printfn "Current BlockNumber is: %A" blockNumber
+        |> printfn "Current BlockNumber is: %A"
 
 // Print some details for a given transaction:
 let printTxDetails (tx: Transaction) =
@@ -32,25 +31,23 @@ let printBlockDetails (block: BlockWithTransactions) =
 
 // Get a block with its transactions:
 let printBlockWithTransactions (web3: Web3) =
-    let blockNumber = (bigint 8257129)
+    let blockNumber = bigint 8257129
     let hexBlockNumber = HexBigInteger(blockNumber)
-    let block =
-        web3.Eth.Blocks.GetBlockWithTransactionsByNumber.SendRequestAsync(hexBlockNumber)
+    web3.Eth.Blocks.GetBlockWithTransactionsByNumber.SendRequestAsync hexBlockNumber
         |> Async.AwaitTask
         |> Async.RunSynchronously
-    printBlockDetails block
+        |> printBlockDetails
 
 // Get a transaction and its receipt by its hash:
 let printTxAndReceipt (web3: Web3) =
     let txHash = "0xb4729a0d8dd30e3070d0cb203090f2b792e029f6fa4629e96d2ebc1de13cb5c4"
     printfn "Getting TX for hash %s" txHash
-    let transaction =
-        web3.Eth.Transactions.GetTransactionByHash.SendRequestAsync(txHash)
+    web3.Eth.Transactions.GetTransactionByHash.SendRequestAsync txHash
         |> Async.AwaitTask
         |> Async.RunSynchronously
-    printTxDetails transaction
+        |> printTxDetails
     let receipt =
-        web3.Eth.Transactions.GetTransactionReceipt.SendRequestAsync(txHash)
+        web3.Eth.Transactions.GetTransactionReceipt.SendRequestAsync txHash
         |> Async.AwaitTask
         |> Async.RunSynchronously
     printfn "TransactionReceipt Logs: %d" receipt.Logs.Count

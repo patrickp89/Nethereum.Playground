@@ -1,0 +1,36 @@
+open Nethereum.Web3
+
+// This sample shows how to convert units of Ether.
+
+// Generate an instance of web3:
+let generateWeb3Instance () =
+    Web3(url = "https://mainnet.infura.io/v3/7238211010344719ad14a89db874158c")
+ 
+// Check the balance of the Ethereum Foundation (just because we can):
+let getBalance (web3: Web3) =
+    let account = "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
+    let balance =
+        web3.Eth.GetBalance.SendRequestAsync account
+        |> Async.AwaitTask
+        |> Async.RunSynchronously
+    balance.Value
+
+// By default, the returned value is in Wei (the lowest unit of value), 
+// not necessarily easy to read unless you’re really talented at Maths.
+// To make the return value more human friendly, we can convert the balance 
+// to Ether using the conversion utility’s "FromWei" method:
+let printBalance balance =
+    printfn "Balance of Ethereum Foundation's account: %A" balance
+    let balanceInEther = Web3.Convert.FromWei balance
+    printfn "Balance of Ethereum Foundation's account in Ether: %A" balanceInEther
+    // We can even "counter convert" the balance back to wei using the "ToWei" 
+    // method (this has no other purpose than demonstrating the method, of course):
+    let backToWei = Web3.Convert.ToWei balanceInEther
+    printfn "Balance of Ethereum Foundation's account back in Wei: %A" backToWei
+
+[<EntryPoint>]
+let main argv =
+    generateWeb3Instance ()
+    |> getBalance
+    |> printBalance
+    0

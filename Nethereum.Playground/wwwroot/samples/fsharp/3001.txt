@@ -12,14 +12,13 @@ let generateWeb3Instance () =
 // Check the balance of one of the accounts provisioned in our chain:
 let checkBalance (web3: Web3) =
     let account = "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
-    let balance =
-        web3.Eth.GetBalance.SendRequestAsync(account)
+    web3.Eth.GetBalance.SendRequestAsync account
         |> Async.AwaitTask
         |> Async.RunSynchronously
-    printfn "Balance of Ethereum Foundation's account: %A" balance
+        |> printfn "Balance of Ethereum Foundation's account: %A"
 
 [<EntryPoint>]
 let main argv =
-    let web3 = generateWeb3Instance ()
-    checkBalance web3
+    generateWeb3Instance ()
+    |> checkBalance
     0

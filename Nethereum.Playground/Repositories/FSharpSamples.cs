@@ -11,7 +11,6 @@ namespace Nethereum.Playground.Repositories
         {
             var samples = new List<CodeSample>
             {
-
                 new CodeSample()
                 {
                     Name = "Chain information: Query Ether account balance using Infura",
@@ -21,7 +20,17 @@ namespace Nethereum.Playground.Repositories
                 {
                     Name = "Chain information: Get Block number, Block, Transaction and Receipt using Infura",
                     Id = "3002"
-                }
+                },
+                new CodeSample()
+                {
+                    Name = "Ether: Unit conversion between Ether and Wei",
+                    Id = "3014"
+                },
+                new CodeSample()
+                {
+                    Name = "Ether: Transfer Ether to an account",
+                    Id = "3003"
+                },
             };
 
             foreach (var sample in samples)

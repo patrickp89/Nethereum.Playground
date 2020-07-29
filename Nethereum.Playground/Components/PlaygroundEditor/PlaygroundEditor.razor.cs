@@ -469,7 +469,9 @@ namespace Nethereum.Playground.Components.PlaygroundEditor
 
         protected async Task CompileAndRunFsharp()
         {
-            // TODO: ...
+            // TODO: Unfortunately, F# cannot be compiled with the off-the-shelf Roslyn infrastructure :'(
+            // TODO: One might be able to create a workaround by using: https://www.nuget.org/packages/FSharp.Compiler.Service
+            await Task.CompletedTask;
         }
     }
 
